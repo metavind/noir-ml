@@ -1,4 +1,5 @@
 mod dot_prod;
+mod vec_add;
 
 ////////////////////
 //     TESTS      //
