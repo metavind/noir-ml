@@ -1,3 +1,4 @@
+mod dense;
 mod dot_prod;
 mod mat_vec_mul;
 mod vec_add;
