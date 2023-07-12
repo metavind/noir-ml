@@ -5,7 +5,7 @@ global comp_constant_bytes = [0x00, 0x00, 0x00, 0xf8, 0xc9, 0xfa, 0xf0, 0xa1, 0x
 fn is_positive(value: Field) -> bool {
   let value_bytes = value.to_le_bytes(32);
 
-  let mut result: bool = false;
+  let mut result: bool = true;
   let mut done: bool = false;
 
   for i in 0..32 {
@@ -26,7 +26,7 @@ fn test_is_positive() {
   assert(is_positive(1) == true);
   assert(is_positive(-1) == false);
   let comp_constant = 10944121435919637611123202872628637544274182200208017171849102093287904247808;
-  assert(is_positive(comp_constant) == false);
+  assert(is_positive(comp_constant) == true);
   assert(is_positive(comp_constant - 1) == true);
   assert(is_positive(comp_constant + 1) == false);
 }

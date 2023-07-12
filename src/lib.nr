@@ -3,6 +3,7 @@ mod arg_min;
 mod dense;
 mod dot_prod;
 mod is_negative;
+mod is_positive;
 mod mat_mul;
 mod mat_vec_mul;
 mod pad_arr;
