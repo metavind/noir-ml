@@ -2,7 +2,10 @@ mod arg_max;
 mod arg_min;
 mod dense;
 mod dot_prod;
+mod mat_mul;
 mod mat_vec_mul;
+mod pad_arr;
+mod prune_arr;
 mod vec_add;
 
 ////////////////////
