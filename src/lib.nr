@@ -8,6 +8,7 @@ mod mat_mul;
 mod mat_vec_mul;
 mod pad_arr;
 mod prune_arr;
+mod relu;
 mod vec_add;
 
 ////////////////////
