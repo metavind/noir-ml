@@ -9,9 +9,13 @@ fn is_positive(value: Field) -> bool {
   let mut done: bool = false;
 
   for i in 0..32 {
-    if !done & (value_bytes[31 - i] != comp_constant_bytes[31 - i]) {
-      done = true;
-      result = (value_bytes[31 - i] < comp_constant_bytes[31 - i]);    
+    if !done {
+      let byte1 = value_bytes[31 - i] as u8; 
+      let byte2 = comp_constant_bytes[31 - i] as u8; 
+      if byte1 != byte2 {
+        done = true;
+        result = byte1 < byte2;    
+      }
     }
   }
   result

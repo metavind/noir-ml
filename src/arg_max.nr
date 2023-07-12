@@ -1,3 +1,5 @@
+use crate::is_greater_than_signed;
+
 fn arg_max(values: [ Field ]) -> Field {
   assert(values.len() as u64 > 0);
 
@@ -6,7 +8,7 @@ fn arg_max(values: [ Field ]) -> Field {
 
   for i in 1..values.len() {
     let value = values[i];
-    if value as u64 > max_value as u64 {
+    if is_greater_than_signed::is_greater_than_signed(value, max_value) {
       max_value = value;
       max_index = i;
     }

@@ -4,7 +4,9 @@ fn relu<N>(values : [ Field; N ]) -> [ Field; N ] {
   let mut result = [0; N];
 
   for i in 0..N {
-    result[i] = values[i] * (is_positive::is_positive(values[i]) as Field);
+    if is_positive::is_positive(values[i]) {
+      result[i] = values[i];
+    }
   }
   result
 }
