@@ -3,18 +3,18 @@
 global comp_constant_bytes = [0x00, 0x00, 0x00, 0xf8, 0xc9, 0xfa, 0xf0, 0xa1, 0x48, 0xb8, 0xdc, 0x3c, 0x24, 0xf4, 0x19, 0x94, 0x2e, 0xac, 0xc0, 0x40, 0xdb, 0x22, 0x28, 0xdc, 0x14, 0xd0, 0x98, 0x70, 0x39, 0x27, 0x32, 0x18];
 
 fn is_negative(value: Field) -> bool {
-    let value_bytes = value.to_le_bytes(32);
+  let value_bytes = value.to_le_bytes(32);
 
-    let mut result: bool = false;
-    let mut done: bool = false;
+  let mut result: bool = false;
+  let mut done: bool = false;
 
-    for i in 0..32 {
-        if !done & (value_bytes[31 - i] != comp_constant_bytes[31 - i]) {
-            done = true;
-            result = (value_bytes[31 - i] > comp_constant_bytes[31 - i]);    
-        }
+  for i in 0..32 {
+    if !done & (value_bytes[31 - i] != comp_constant_bytes[31 - i]) {
+      done = true;
+      result = (value_bytes[31 - i] > comp_constant_bytes[31 - i]);    
     }
-    result
+  }
+  result
 }
 
 ////////////////////
