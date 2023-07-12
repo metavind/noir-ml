@@ -1,3 +1,5 @@
+mod arg_max;
+mod arg_min;
 mod dense;
 mod dot_prod;
 mod mat_vec_mul;
