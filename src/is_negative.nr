@@ -22,10 +22,11 @@ fn is_negative(value: Field) -> bool {
 ////////////////////
 #[test]
 fn test_is_negative() {
-  assert(is_negative(0)==false);
-  assert(is_negative(1)==false);
-  assert(is_negative(-1)==true);
+  assert(is_negative(0) == false);
+  assert(is_negative(1) == false);
+  assert(is_negative(-1) == true);
   let comp_constant = 10944121435919637611123202872628637544274182200208017171849102093287904247808;
-  assert(is_negative(comp_constant)==false);
-  assert(is_negative(comp_constant+1)==true);
+  assert(is_negative(comp_constant) == false);
+  assert(is_negative(comp_constant - 1) == false);
+  assert(is_negative(comp_constant + 1) == true);
 }
