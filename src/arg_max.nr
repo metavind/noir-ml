@@ -1,12 +1,12 @@
 use crate::is_greater_than_signed;
 
-fn arg_max(values: [ Field ]) -> Field {
-  assert(values.len() as u64 > 0);
+fn arg_max<N>(values: [ Field; N ]) -> Field {
+  assert(N as u64 > 0);
 
   let mut max_index = 0;
   let mut max_value = values[0];
 
-  for i in 1..values.len() {
+  for i in 1..N {
     let value = values[i];
     if is_greater_than_signed::is_greater_than_signed(value, max_value) {
       max_value = value;
