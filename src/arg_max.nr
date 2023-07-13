@@ -24,5 +24,8 @@ fn test_arg_max() {
     assert(arg_max([ 1 ]) == 0); 
     assert(arg_max([ 1, 2 ]) == 1); 
     assert(arg_max([ 2, 1]) == 0); 
-    assert(arg_max([ 3, 2, 5, 1, 4 ]) == 2); 
+    assert(arg_max([ 3, 2, 5, 1, 4 ]) == 2);
+    assert(arg_max([ -1, 1]) == 1);
+    assert(arg_max([ 1, -1]) == 0);
+    assert(arg_max([ -3, -2, -5, -1, -4]) == 3);
 }
