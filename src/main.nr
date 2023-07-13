@@ -6,6 +6,7 @@ mod is_negative;
 mod is_positive;
 mod mat_vec_mul;
 mod relu;
+mod models;
 
 use dep::std;
 
@@ -21,7 +22,7 @@ fn main(input: pub [Field; 2], hid_weights: [Field; 20], hid_bias: [Field; 10], 
 //     TESTS      //
 ////////////////////
 #[test]
-fn test_test() {
+fn test_main() {
   assert(1 == 1);
   let input: [Field; 2] = [321429, -305944];
 
