@@ -6,12 +6,10 @@ fn is_greater_than_signed(x: Field, value: Field) -> bool {
   let x_is_positive = is_positive::is_positive(x);
   let value_is_positive = is_positive::is_positive(value);
 
-  if (x_is_positive & !value_is_positive) {
-    true
-  } else if (!x_is_positive & value_is_positive) {
-    false
+  if (x_is_positive == value_is_positive) {
+     is_greater_than::is_greater_than(x, value)
   } else {
-    is_greater_than::is_greater_than(x, value)
+    x_is_positive > value_is_positive
   }
 }
 
