@@ -1,5 +1,5 @@
 [package]
-name = "noir-ml"
+name = "noir_ml"
 type = "lib"
 authors = [""]
 compiler_version = "0.9.0"
