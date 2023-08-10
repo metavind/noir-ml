@@ -1,8 +1,6 @@
-use crate::layers;
-use crate::activations;
-use crate::utils;
-
-use dep::std;
+use crate::layers::dense;
+use crate::activations::relu;
+use crate::utils::arg_max;
 
 global hid_weights: [Field; 20] = [-201799, 253330, -94632, -1679517, -194549, 139218, -158168, 497705, -566381, 1437657, -1098219, -252057, -643523, -291986, -291486, 26194, 1668978, 576082, -1310992, -1006468];
 global hid_bias: [Field; 10] = [332004696131, -615841984749, -247557893395, 528358042240, -533230543137, -386732697487, 680972695351, -655961990356, -657531619072, -634221017361];
@@ -11,10 +9,10 @@ global out_weights: [Field; 20] = [-167334, 1135549, -176126, -262836, 915547, 5
 global out_bias: [Field; 2] = [-94743110239505760, 611362576484680192];
 
 fn circle_fc(input: [Field; 2]) -> Field {
-  let mut hid = layers::dense(input, hid_weights, hid_bias);
-  hid = activations::relu(hid);
-  let output = layers::dense(hid, out_weights, out_bias);
-  let result = utils::arg_max(output);
+  let mut hid = dense(input, hid_weights, hid_bias);
+  hid = relu(hid);
+  let output = dense(hid, out_weights, out_bias);
+  let result = arg_max(output);
   result
 }
 
