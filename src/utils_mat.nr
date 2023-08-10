@@ -1,3 +1,17 @@
+fn mat_vec_mul<N_IN, N_IN_OUT, N_OUT>(m: [ Field; N_IN_OUT], v: [Field; N_IN]) -> [Field; N_OUT] {
+  assert(N_IN_OUT == N_IN * N_OUT);
+  
+  let mut result = [ 0; N_OUT ];
+
+  for i in 0..N_OUT {
+    for j in 0..N_IN {
+      result[i] += m[i*N_IN + j] * v[j];
+    }
+  }
+  result
+}
+
+
 // Ideally, there we would support for const generic and we can write a funtion like this:
 //fn mat_mul<N, M, L>(x : [ Field; N*M ], y : [ Field; M*L ]) -> [ Field; N*L ] {
 //
@@ -52,9 +66,17 @@ fn mat_mul(x: Matrix, y: Matrix) -> Matrix {
   result
 }
 
+
 ////////////////////
 //     TESTS      //
 ////////////////////
+#[test]
+fn test_mat_vec_mul() {
+  assert(mat_vec_mul([ 1 ], [ 2 ]) == [ 2 ]);
+  assert(mat_vec_mul([ 1, 2, 3, 4 ], [ 5, 6]) == [ 17, 39 ]);
+  assert(mat_vec_mul([ 1, 2, 3, 4, 5, 6, 7, 8, 9 ], [ 2, 1, 3 ]) == [ 13, 31, 49 ]);
+}
+
 #[test]
 fn test_mat_mul() {
   let x = Matrix { rows: 2, cols: 2, data: pad_arr([ 1, 2, 3, 4 ]) };
