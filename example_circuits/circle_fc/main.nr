@@ -1,6 +1,6 @@
-use crate::layers::dense;
-use crate::activations::relu;
-use crate::utils::arg_max;
+use noir-ml::layers::dense;
+use noir-ml::activations::relu;
+use noir-ml::utils::arg_max;
 
 global hid_weights: [Field; 20] = [-201799, 253330, -94632, -1679517, -194549, 139218, -158168, 497705, -566381, 1437657, -1098219, -252057, -643523, -291986, -291486, 26194, 1668978, 576082, -1310992, -1006468];
 global hid_bias: [Field; 10] = [332004696131, -615841984749, -247557893395, 528358042240, -533230543137, -386732697487, 680972695351, -655961990356, -657531619072, -634221017361];
