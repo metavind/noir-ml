@@ -14,6 +14,7 @@ fn relu<N>(values : [ Field; N ]) -> [ Field; N ] {
 ////////////////////
 //     TESTS      //
 ////////////////////
+
 #[test]
 fn test_relu() {
   assert(relu([ -1, 0, 1]) == [ 0, 0, 1 ]);

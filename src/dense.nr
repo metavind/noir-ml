@@ -15,6 +15,7 @@ fn dense<N_IN, N_IN_OUT, N_OUT>(x: [ Field; N_IN], w: [Field; N_IN_OUT], b: [Fie
 ////////////////////
 //     TESTS      //
 ////////////////////
+
 #[test]
 fn test_dense() {
   assert(dense([ 1, 2, 3 ], [ 4, 5, 6, 7, 8, 9 ], [ 10, 11 ]) == [ 42, 61 ]);

@@ -19,8 +19,7 @@
 
 // The following code uses the second approach. It is not ideal, but it works.
 
-use crate::prune_arr;
-use crate::pad_arr;
+use crate::utils_arr;
 
 global MAX_LENGTH: comptime Field = 10;
 
@@ -58,13 +57,13 @@ fn mat_mul(x: Matrix, y: Matrix) -> Matrix {
 ////////////////////
 #[test]
 fn test_mat_mul() {
-  let x = Matrix { rows: 2, cols: 2, data: pad_arr::pad_arr([ 1, 2, 3, 4 ]) };
-  let y = Matrix { rows: 2, cols: 2, data: pad_arr::pad_arr([ 5, 6, 7, 8 ]) };
+  let x = Matrix { rows: 2, cols: 2, data: utils_arr::pad_arr([ 1, 2, 3, 4 ]) };
+  let y = Matrix { rows: 2, cols: 2, data: utils_arr::pad_arr([ 5, 6, 7, 8 ]) };
 
   let res = mat_mul(x, y);
 
   assert(res.rows == 2);
   assert(res.cols == 2);
-  assert(prune_arr::prune_arr(res.data) == [ 19, 22, 43, 50 ]);
+  assert(utils::prune_arr(res.data) == [ 19, 22, 43, 50 ]);
 
 }
