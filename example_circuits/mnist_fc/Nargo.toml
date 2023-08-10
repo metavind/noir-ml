@@ -1,0 +1,8 @@
+[package]
+name = "mnist_fc"
+type = "bin"
+authors = [""]
+compiler_version = "0.9.0"
+
+[dependencies]
+noir_ml = { path = "../../noir_ml" }
