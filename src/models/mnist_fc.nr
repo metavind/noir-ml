@@ -1,4 +1,4 @@
-use crate::dense;
+use crate::layers;
 use crate::activations;
 use crate::utils;
 
@@ -11,9 +11,9 @@ global out_weights: [Field; 200] =  [-410390, -886455, -953463, -1193870, -96469
 global out_bias: [Field; 10] = [-512028455734252928, 1258636355400085504, -1769820690155029248, -455340862274169920, 588846862316131584, -1144255757331848192, -402987152338027968, 1789341330528259328, -631388843059539840, 1350203037261963008];
 
 fn mnist_fc(input: [Field; 784]) -> Field {
-  let mut hid = dense::dense(input, hid_weights, hid_bias);
+  let mut hid = layers::dense(input, hid_weights, hid_bias);
   hid = activations::relu(hid);
-  let output = dense::dense(hid, out_weights, out_bias);
+  let output = layers::dense(hid, out_weights, out_bias);
   let result = utils::arg_max(output);
   result
 }

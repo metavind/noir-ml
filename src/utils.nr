@@ -21,6 +21,7 @@ fn is_positive(value: Field) -> bool {
   result
 }
 
+
 fn is_negative(value: Field) -> bool {
   let value_bytes = value.to_le_bytes(32);
 
@@ -60,6 +61,7 @@ fn is_greater_than(x: Field, value: Field) -> bool {
   result
 }
 
+
 fn is_greater_than_signed(x: Field, value: Field) -> bool {
   let x_is_positive = is_positive(x);
   let value_is_positive = is_positive(value);
@@ -70,6 +72,7 @@ fn is_greater_than_signed(x: Field, value: Field) -> bool {
     x_is_positive > value_is_positive
   }
 }
+
 
 fn arg_max<N>(values: [ Field; N ]) -> Field {
   assert(N as u64 > 0);

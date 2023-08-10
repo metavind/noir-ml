@@ -1,4 +1,4 @@
-use crate::dense;
+use crate::layers;
 use crate::activations;
 use crate::utils;
 
@@ -11,9 +11,9 @@ global out_weights: [Field; 20] = [-167334, 1135549, -176126, -262836, 915547, 5
 global out_bias: [Field; 2] = [-94743110239505760, 611362576484680192];
 
 fn circle_fc(input: [Field; 2]) -> Field {
-  let mut hid = dense::dense(input, hid_weights, hid_bias);
+  let mut hid = layers::dense(input, hid_weights, hid_bias);
   hid = activations::relu(hid);
-  let output = dense::dense(hid, out_weights, out_bias);
+  let output = layers::dense(hid, out_weights, out_bias);
   let result = utils::arg_max(output);
   result
 }
