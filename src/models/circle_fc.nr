@@ -1,6 +1,6 @@
 use crate::dense;
-use crate::relu;
-use crate::arg_max;
+use crate::activations;
+use crate::utils;
 
 use dep::std;
 
@@ -12,9 +12,9 @@ global out_bias: [Field; 2] = [-94743110239505760, 611362576484680192];
 
 fn circle_fc(input: [Field; 2]) -> Field {
   let mut hid = dense::dense(input, hid_weights, hid_bias);
-  hid = relu::relu(hid);
+  hid = activations::relu(hid);
   let output = dense::dense(hid, out_weights, out_bias);
-  let result = arg_max::arg_max(output);
+  let result = utils::arg_max(output);
   result
 }
 

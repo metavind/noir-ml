@@ -1,10 +1,10 @@
-use crate::is_positive;
+use crate::utils;
 
 fn relu<N>(values : [ Field; N ]) -> [ Field; N ] {
   let mut result = [0; N];
 
   for i in 0..N {
-    if is_positive::is_positive(values[i]) {
+    if utils::is_positive(values[i]) {
       result[i] = values[i];
     }
   }
