@@ -2,7 +2,7 @@ import json
 import argparse
 
 
-def generate_nn_code(save_path, model_parameters_file, test_samples_file):
+def generate_nn_code(save_path, model_parameters_file, test_samples_file=None):
     # Read the model_parameters
     with open(model_parameters_file, 'r') as f:
         model_parameters = json.load(f)
@@ -19,12 +19,13 @@ def generate_nn_code(save_path, model_parameters_file, test_samples_file):
                     ) // len(model_parameters['l1_biases'])
 
     # Read the test_samples
-    with open(test_samples_file, 'r') as f:
-        test_samples = json.load(f)
+    if test_samples_file is not None:
+        with open(test_samples_file, 'r') as f:
+            test_samples = json.load(f)
 
-    test_str = "////////////////////\n//     TESTS      //\n////////////////////\n"
-    for i in range(1, len(test_samples) // 2 + 1):
-        test_str += f"#[test]\nfn test_main_{i:03}() {{\n  let sample = {test_samples[f'input{i}']};\n  assert(main(sample) == {test_samples[f'output{i}']});\n}}\n\n"
+        test_str = "\n////////////////////\n//     TESTS      //\n////////////////////\n"
+        for i in range(1, len(test_samples) // 2 + 1):
+            test_str += f"#[test]\nfn test_main_{i:03}() {{\n  let sample = {test_samples[f'input{i}']};\n  assert(main(sample) == {test_samples[f'output{i}']});\n}}\n\n"
 
     # Building the main function logic based on the number of layers
     main_logic = "  let output = input;\n"  # initialize
@@ -40,8 +41,9 @@ def generate_nn_code(save_path, model_parameters_file, test_samples_file):
             "use dep::noir_ml::{layers::dense, activations::relu, utils::arg_max};\n\n")
         f.write(model_str)
         f.write(
-            f"fn main(input: [Field; {input_dim}]) -> pub Field {{\n{main_logic}  output\n}}\n\n")
-        f.write(test_str)
+            f"fn main(input: [Field; {input_dim}]) -> pub Field {{\n{main_logic}  output\n}}\n")
+        if test_samples_file is not None:
+            f.write(test_str)
 
 
 if __name__ == "__main__":
