@@ -49,12 +49,12 @@ def generate_nn_code(save_path, model_parameters_file, test_samples_file=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Generate 'main.nr' at desired path from model parameters and test samples.")
-    parser.add_argument("--model_parameters", type=str,
+    parser.add_argument("--save_path", type=str, required=True,
+                        help="Path to save the generated 'main.nr'.")
+    parser.add_argument("--model_parameters", type=str, required=True,
                         help="Path to the JSON file containing model parameters.")
     parser.add_argument("--test_samples", type=str,
                         help="Path to the JSON file containing test samples.")
-    parser.add_argument("--save_path", type=str,
-                        help="Path to save the generated 'main.nr'.")
 
     args = parser.parse_args()
 
