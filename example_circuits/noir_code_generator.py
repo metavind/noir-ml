@@ -1,3 +1,58 @@
+"""
+Neural Network Code Generator for Noir
+
+Description:
+    This script provides functionality to automatically generate Aleo code
+    for representing and computing neural network models. The resulting Noir code
+    contains data structures for the neural network's weights and biases along with
+    the requisite logic for carrying out forward pass through the network.
+
+Inputs:
+    - Path to save the generated 'main.nr'.
+    - A JSON file containing the neural network's weights and biases. The JSON should
+      have keys of the form 'lX_weights' and 'lX_biases', where X indicates the layer number
+      (starting from 1). The JSON file should be structured as:
+        {
+            "l1_weights": [l1_weights],
+            "l1_biases": [l1_biases],
+            "l2_weights": [l2_weights],
+            "l2_biases": [l2_biases],
+            ...
+        }
+    - (Optional) A JSON file containing test samples, structured with 'inputX' and 'outputX' keys,
+      where X represents the sample number.
+
+Outputs:
+    - A Noir source code file ('main.nr') that illustrates the given neural network.
+      This includes a `main` function that receives input data and yields an output.
+    - If test samples are provided, the script will also generate test functions within
+      the Noir code to verify the network's computations against the samples.
+
+Usage:
+    Run the script, supplying the necessary command-line arguments:
+    --save_path: Destination path to save the generated 'main.nr'.
+    --model_parameters: Path to the JSON file detailing the model parameters.
+    --test_samples: (Optional) Path to the JSON file containing the test samples.
+
+Example:
+    python noir_program_generator.py --save_path src/main.nr --model_parameters model_parameters.json --test_samples test_samples.json
+
+Code Generation Process:
+    1. The script begins by parsing the JSON input to deduce the architecture of
+       the neural network, taking into account the number of layers and their dimensions.
+    2. Corresponding global variables are defined in the Noir code for each layer's
+       weights and biases.
+    3. The `main` function in Noir is crafted to execute the forward pass using the
+       weights and biases set in the global variables.
+    4. ReLU activation function is employed for all layers excluding the output layer.
+    5. Finally, the Noir code computes the `arg_max` of the output layer to get the
+       index with the highest value, denoting the network's prediction.
+
+Note:
+    The script leverages the 'noir_ml' library within Noir to utilize functions like `dense`,
+    `relu`, and `arg_max` for the neural network computations.
+"""
+
 import json
 import argparse
 
