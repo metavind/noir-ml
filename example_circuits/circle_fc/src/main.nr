@@ -1,4 +1,4 @@
-use dep::noir_ml::{layers::dense, activations::relu, utils::arg_max};
+use dep::noir_ml::{layers::fc, activations::relu, utils::arg_max};
 
 global l1_weights: [Field; 20] = [-201799, 253330, -94632, -1679517, -194549, 139218, -158168, 497705, -566381, 1437657, -1098219, -252057, -643523, -291986, -291486, 26194, 1668978, 576082, -1310992, -1006468];
 global l1_biases: [Field; 10] = [332004696131, -615841984749, -247557893395, 528358042240, -533230543137, -386732697487, 680972695351, -655961990356, -657531619072, -634221017361];
@@ -8,8 +8,8 @@ global l2_biases: [Field; 2] = [-94743110239505760, 611362576484680192];
 
 fn main(input: [Field; 2]) -> pub Field {
   let output = input;
-  let output = relu(dense(output, l1_weights, l1_biases));
-  let output = arg_max(dense(output, l2_weights, l2_biases));
+  let output = relu(fc(output, l1_weights, l1_biases));
+  let output = arg_max(fc(output, l2_weights, l2_biases));
   output
 }
 
