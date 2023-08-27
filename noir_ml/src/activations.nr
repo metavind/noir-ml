@@ -1,5 +1,20 @@
+//! Activation Functions for Neural Networks in Noir
+//!
+//! This module contains activation functions commonly used in neural networks.
+//! The available functions are:
+//! - ReLU
+
 use crate::utils::is_positive;
 
+/// ReLU (Rectified Linear Unit) Activation Function.
+/// y = max(0, x)
+///
+/// # Example
+/// ```
+/// let values = [-5, 2, 0];
+/// let activated = relu(values);
+/// assert_eq!(activated, [0, 2, 0]);
+/// ```
 fn relu<N>(values : [ Field; N ]) -> [ Field; N ] {
   let mut result = [0; N];
 
