@@ -1,3 +1,19 @@
+//! Layer Operations for Neural Networks in Noir
+//!
+//! This module provides implementations for different neural network layers.
+//! Currently, the available layers are:
+//! - Dense (fully connected)
+
+/// Dense (Fully Connected) Layer.
+///
+/// # Example
+/// ```
+/// let input = [1, 2];
+/// let weights = [2, 3, 4, 5];
+/// let biases = [1, 2];
+/// let output = dense(input, weights, biases);
+/// assert_eq!(output, [9, 16]);
+/// ```
 fn dense<N_IN, N_IN_OUT, N_OUT>(x: [ Field; N_IN], w: [Field; N_IN_OUT], b: [Field; N_OUT]) -> [Field; N_OUT] {
   assert(N_IN_OUT == N_IN * N_OUT);
   
