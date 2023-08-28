@@ -49,7 +49,7 @@ Code Generation Process:
        index with the highest value, denoting the network's prediction.
 
 Note:
-    The script leverages the 'noir_ml' library within Noir to utilize functions like `dense`,
+    The script leverages the 'noir_ml' library within Noir to utilize functions like `fc`,
     `relu`, and `arg_max` for the neural network computations.
 """
 
@@ -86,14 +86,14 @@ def generate_nn_code(save_path, model_parameters_file, test_samples_file=None):
     main_logic = "  let output = input;\n"  # initialize
     for i in range(1, idx):
         if i != idx - 1:  # if it's not the last layer
-            main_logic += f"  let output = relu(dense(output, l{i}_weights, l{i}_biases));\n"
+            main_logic += f"  let output = relu(fc(output, l{i}_weights, l{i}_biases));\n"
         else:  # if it's the last layer
-            main_logic += f"  let output = arg_max(dense(output, l{i}_weights, l{i}_biases));\n"
+            main_logic += f"  let output = arg_max(fc(output, l{i}_weights, l{i}_biases));\n"
 
     # Write the content to main.nr
     with open(save_path, 'w') as f:
         f.write(
-            "use dep::noir_ml::{layers::dense, activations::relu, utils::arg_max};\n\n")
+            "use dep::noir_ml::{layers::fc, activations::relu, utils::arg_max};\n\n")
         f.write(model_str)
         f.write(
             f"fn main(input: [Field; {input_dim}]) -> pub Field {{\n{main_logic}  output\n}}\n")
