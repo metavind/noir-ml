@@ -1,2 +1,64 @@
 # noir-ml
 Noir Circuits Library for Machine Learning
+
+This repository provides a framework for creating noir programs for inference on multi-layer feedforward networks.
+
+We also provide two circuit examples, one for binary classification on circles dataset, and another for multi-class classification on mnist dataset.
+
+## Usage
+The library can be used to create noir programs by either directly writing the noir code defining the network architecture, or by using the provided python script to generate the noir code from a custom trained neural network.
+
+### 1. Writing noir code directly
+The noir code for a neural network can be written using the [`noir_ml`](noir_ml) library. The library contains the following modules:
+- [`activations`](noir_ml/src/activations.nr): Contains the activation functions that can be used in the network - `relu`.
+- [`layers`](noir_ml/src/layers.nr): Contains the layer definitions that can be used in the network - `fc` (fully-connected).
+- [`utils`](noir_ml/src/utils.nr): Contains utility functions for field arithmetic and neural network operations - `arg_max`.
+
+An example of a noir program for a neural network with one hidden layer and one output layer is given below:
+```rust
+use noir_ml::layers::{fc};
+use noir_ml::activations::{relu};
+use noir_ml::utils::{arg_max};
+
+fn main(input: Field) -> Field {
+    let l1_weights = [1, 2, 3, 4, 5, 6];
+    let l1_biases = [1, 2, 3];
+    let l2_weights = [1, 2, 3];
+    let l2_biases = [1];
+
+    let l1 = relu(fc(input, l1_weights, l1_biases));
+    let l2 = fc(l1, l2_weights, l2_biases);
+
+    arg_max(l2)
+}
+```
+
+### 2. Generating noir code from a custom trained neural network
+The [`noir_code_generator.py`](noir_code_generator.py) script can be used to generate noir code for a custom trained multi-layer feedforward neural network. The script takes as input the parameters of the trained neural network, and optionally a file containing test samples, and generates the corresponding noir code along with tests ,if applicable. The script can be run using the following command:
+```sh
+python noir_program_generator.py --save_path src/main.nr --model_parameters model_parameters.json --test_samples test_samples.json
+```
+Note: The model_parameters file should be a JSON containing the neural network's weights and biases. The JSON should have keys of the form *l\{idx}_weights* and *l\{idx}_biases*, where *idx* is the layer number (starting from 1). The value of each key should be a flattened list of the weights/biases of the corresponding layer. For example, the following JSON is a valid model_parameters file for a neural network with 2 hidden layers and 1 output layer. It has an input dimension of 3, and an output dimension of 1.
+
+```json
+{
+    "l1_weights": [1, 2, 3, 4, 5, 6],
+    "l1_biases": [1, 2],
+    "l2_weights": [1, 2, 3, 4],
+    "l2_biases": [1, 2],
+    "l3_weights": [1, 2],
+    "l3_biases": [1]
+}
+```
+
+Note: The test_samples file should be a JSON containing the test samples. The JSON should have keys of the form *input{idx}* and *output{idx}*, where *idx* is the index of the test sample (starting from 1). The value of each key should be a list of the input/output of the corresponding test sample. For example, the following JSON is a valid test_samples file for a neural network defined by the parameters in the above example.
+
+```json
+{
+    "input1": [1, 2, 3],
+    "output1": 0,
+    "input2": [4, 5, 6],
+    "output2": 1
+}
+```
+
