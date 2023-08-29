@@ -115,4 +115,4 @@ if __name__ == "__main__":
 
     generate_nn_code(args.save_path, args.model_parameters, args.test_samples)
 
-    print(f"Generated Noir program at {args.save_path}")
+    print(f"Generated Noir program: {args.save_path}")
