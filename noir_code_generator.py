@@ -80,7 +80,7 @@ def generate_nn_code(save_path, model_parameters_file, test_samples_file=None):
 
         test_str = "\n////////////////////\n//     TESTS      //\n////////////////////\n"
         for i in range(1, len(test_samples) // 2 + 1):
-            test_str += f"#[test]\nfn test_main_{i:03}() {{\n  let sample = {test_samples[f'input{i}']};\n  assert(main(sample) == {test_samples[f'output{i}']});\n}}\n\n"
+            test_str += f"#[test]\nfn test_main_{i:03}() {{\n  let sample = {test_samples[f'in{i}']};\n  assert(main(sample) == {test_samples[f'out{i}']});\n}}\n\n"
 
     # Building the main function logic based on the number of layers
     main_logic = "  let output = input;\n"  # initialize

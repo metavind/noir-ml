@@ -59,14 +59,14 @@ Note: The model_parameters file should be a JSON containing the neural network's
 }
 ```
 
-Note: The test_samples file should be a JSON containing the test samples. The JSON should have keys of the form *input{idx}* and *output{idx}*, where *idx* is the index of the test sample (starting from 1). The value of each key should be a list of the input/output of the corresponding test sample. For example, the following JSON is a valid test_samples file for a neural network defined by the parameters in the above example.
+Note: The test_samples file should be a JSON containing the test samples. The JSON should have keys of the form *in{idx}* and *out{idx}*, where *idx* is the index of the test sample (starting from 1). The value of each key should be a list of the input/output of the corresponding test sample. For example, the following JSON is a valid test_samples file for a neural network defined by the parameters in the above example.
 
 ```json
 {
-    "input1": [1, 2, 3],
-    "output1": 0,
-    "input2": [4, 5, 6],
-    "output2": 1
+    "in1": [1, 2, 3],
+    "out1": 0,
+    "in2": [4, 5, 6],
+    "out2": 1
 }
 ```
 
