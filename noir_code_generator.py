@@ -10,13 +10,13 @@ Description:
 Inputs:
     - Path to save the generated 'main.nr'.
     - A JSON file containing the neural network's weights and biases. The JSON should
-      have keys of the form 'lX_weights' and 'lX_biases', where X indicates the layer number
+      have keys of the form 'wX' and 'bX', where X indicates the layer number
       (starting from 1). The JSON file should be structured as:
         {
-            "l1_weights": [l1_weights],
-            "l1_biases": [l1_biases],
-            "l2_weights": [l2_weights],
-            "l2_biases": [l2_biases],
+            "w1": [layer_1_weights],
+            "b1": [layer_1_biases],
+            "w2": [layer_2_weights],
+            "b2": [layer_2_biases],
             ...
         }
     - (Optional) A JSON file containing test samples, structured with 'inputX' and 'outputX' keys,
@@ -64,14 +64,14 @@ def generate_nn_code(save_path, model_parameters_file, test_samples_file=None):
 
     idx = 1
     model_str = ""
-    while f'l{idx}_weights' in model_parameters and f'l{idx}_biases' in model_parameters:
-        model_str += f"global l{idx}_weights: [Field; {len(model_parameters[f'l{idx}_weights'])}] = {model_parameters[f'l{idx}_weights']};\n"
-        model_str += f"global l{idx}_biases: [Field; {len(model_parameters[f'l{idx}_biases'])}] = {model_parameters[f'l{idx}_biases']};\n\n"
+    while f'w{idx}' in model_parameters and f'b{idx}' in model_parameters:
+        model_str += f"global w{idx}: [Field; {len(model_parameters[f'w{idx}'])}] = {model_parameters[f'w{idx}']};\n"
+        model_str += f"global b{idx}: [Field; {len(model_parameters[f'b{idx}'])}] = {model_parameters[f'b{idx}']};\n\n"
         idx += 1
 
-    # Calculate the input dimension from l1_weights and l1_biases
-    input_dim = len(model_parameters['l1_weights']
-                    ) // len(model_parameters['l1_biases'])
+    # Calculate the input dimension from w1 and b1
+    input_dim = len(model_parameters['w1']
+                    ) // len(model_parameters['b1'])
 
     # Read the test_samples
     if test_samples_file is not None:
@@ -86,9 +86,9 @@ def generate_nn_code(save_path, model_parameters_file, test_samples_file=None):
     main_logic = "  let output = input;\n"  # initialize
     for i in range(1, idx):
         if i != idx - 1:  # if it's not the last layer
-            main_logic += f"  let output = relu(fc(output, l{i}_weights, l{i}_biases));\n"
+            main_logic += f"  let output = relu(fc(output, w{i}, b{i}));\n"
         else:  # if it's the last layer
-            main_logic += f"  let output = arg_max(fc(output, l{i}_weights, l{i}_biases));\n"
+            main_logic += f"  let output = arg_max(fc(output, w{i}, b{i}));\n"
 
     # Write the content to main.nr
     with open(save_path, 'w') as f:

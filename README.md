@@ -26,13 +26,13 @@ use noir_ml::activations::{relu};
 use noir_ml::utils::{arg_max};
 
 fn main(input: Field) -> Field {
-    let l1_weights = [1, 2, 3, 4, 5, 6];
-    let l1_biases = [1, 2, 3];
-    let l2_weights = [1, 2, 3];
-    let l2_biases = [1];
+    let w1 = [1, 2, 3, 4, 5, 6];
+    let b1 = [1, 2, 3];
+    let w2 = [1, 2, 3];
+    let b2 = [1];
 
-    let l1 = relu(fc(input, l1_weights, l1_biases));
-    let l2 = fc(l1, l2_weights, l2_biases);
+    let l1 = relu(fc(input, w1, b1));
+    let l2 = fc(l1, w2, b2);
 
     arg_max(l2)
 }
@@ -46,16 +46,16 @@ The [`noir_code_generator.py`](noir_code_generator.py) script can be used to gen
 python noir_program_generator.py --save_path src/main.nr --model_parameters model_parameters.json --test_samples test_samples.json
 ```
 
-Note: The model_parameters file should be a JSON containing the neural network's weights and biases. The JSON should have keys of the form *l\{idx}_weights* and *l\{idx}_biases*, where *idx* is the layer number (starting from 1). The value of each key should be a flattened list of the weights/biases of the corresponding layer. For example, the following JSON is a valid model_parameters file for a neural network with 2 hidden layers and 1 output layer. It has an input dimension of 3, and an output dimension of 1.
+Note: The model_parameters file should be a JSON containing the neural network's weights and biases. The JSON should have keys of the form *w\{idx}* and *b\{idx}*, where *idx* is the layer number (starting from 1). The value of each key should be a flattened list of the weights/biases of the corresponding layer. For example, the following JSON is a valid model_parameters file for a neural network with 2 hidden layers and 1 output layer. It has an input dimension of 3, and an output dimension of 1.
 
 ```json
 {
-    "l1_weights": [1, 2, 3, 4, 5, 6],
-    "l1_biases": [1, 2],
-    "l2_weights": [1, 2, 3, 4],
-    "l2_biases": [1, 2],
-    "l3_weights": [1, 2],
-    "l3_biases": [1]
+    "w1": [1, 2, 3, 4, 5, 6],
+    "b1": [1, 2],
+    "w2": [1, 2, 3, 4],
+    "b2": [1, 2],
+    "w3": [1, 2],
+    "b3": [1]
 }
 ```
 
