@@ -48,7 +48,7 @@ fn test_mat_vec_mul() {
 }
 
 #[test]
-fn test_mat_mul() {
+fn test_mat_mul_1() {
   let x = Matrix { rows: 2, cols: 2, data: [ 1, 2, 3, 4 ] };
   let y = Matrix { rows: 2, cols: 2, data: [ 5, 6, 7, 8 ] };
 
@@ -57,5 +57,28 @@ fn test_mat_mul() {
   assert(res.rows == 2);
   assert(res.cols == 2);
   assert(res.data == [ 19, 22, 43, 50 ]);
+}
 
+#[test]
+fn test_mat_mul_2() {
+  let x = Matrix { rows: 5, cols: 2, data: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] };
+  let y = Matrix { rows: 2, cols: 5, data: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] };
+
+  let res = mat_mul(x, y);
+
+  assert(res.rows == 5);
+  assert(res.cols == 5);
+  assert(res.data == [ 13, 16, 19, 22, 25, 27, 34, 41, 48, 55, 41, 52, 63, 74, 85, 55, 70, 85, 100, 115, 69, 88, 107, 126, 145 ]);
+}
+
+#[test]
+fn test_mat_mul_3() {
+  let x = Matrix { rows: 2, cols: 5, data: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] };
+  let y = Matrix { rows: 5, cols: 2, data: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] };
+
+  let res = mat_mul(x, y);
+
+  assert(res.rows == 2);
+  assert(res.cols == 2);
+  assert(res.data == [ 95, 110, 220, 260 ]);
 }
