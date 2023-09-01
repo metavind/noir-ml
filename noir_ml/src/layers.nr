@@ -28,25 +28,25 @@ fn fc<N_IN, N_IN_OUT, N_OUT>(x: [ Field; N_IN], w: [Field; N_IN_OUT], b: [Field;
   result
 }
 
-fn conv1d<N_IN_CIN, N_K_CIN_COUT, N_COUT, N_OUT_COUT>(
-  x: [Field; N_IN_CIN],
-  w: [Field; N_K_CIN_COUT],
+fn conv1d<N_CIN_IN, N_COUT_CIN_K, N_COUT, N_COUT_OUT>(
+  x: [Field; N_CIN_IN],
+  w: [Field; N_COUT_CIN_K],
   b: [Field; N_COUT],
   in_size: Field,
   in_channels: Field,
   out_channels: Field,
   kernel_size: Field,
-  stride: Field) -> [Field; N_OUT_COUT] {
+  stride: Field) -> [Field; N_COUT_OUT] {
 
-  assert(N_IN_CIN == in_channels * in_size);
-  assert(N_K_CIN_COUT == kernel_size * in_channels * out_channels);
+  assert(N_CIN_IN == in_channels * in_size);
+  assert(N_COUT_CIN_K == kernel_size * in_channels * out_channels);
   assert(N_COUT == out_channels);
 
   let out_size = (in_size - kernel_size) / stride + 1;
 
-  assert(N_OUT_COUT == out_size * out_channels);
+  assert(N_COUT_OUT == out_size * out_channels);
 
-  let mut result = [ 0; N_OUT_COUT ];
+  let mut result = [ 0; N_COUT_OUT ];
 
   for i in 0..out_channels {
     for j in 0..out_size {
