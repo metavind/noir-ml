@@ -4,6 +4,8 @@
 //! Currently, the available layers are:
 //! - Fully connected (fc)
 
+use crate::utils::is_greater_than_signed;
+
 /// Fully Connected (fc) Layer.
 ///
 /// # Example
@@ -115,6 +117,35 @@ fn conv2d_nonsq<N_CIN_HIN_WIN, N_COUT_CIN_HK_WK, N_COUT, N_COUT_HOUT_WOUT>(
   result
 }
 
+fn max_pool_1d<N_CIN_IN, N_COUT_OUT>(
+    x: [Field; N_CIN_IN],
+    in_size: Field,
+    in_channels: Field,
+    kernel_size: Field) -> [Field; N_COUT_OUT] {
+
+    assert(N_CIN_IN == in_channels * in_size);
+
+    let out_size = in_size / kernel_size;
+
+    assert(N_COUT_OUT == in_channels * out_size);
+
+    let mut result = [0; N_COUT_OUT];
+
+    for i in 0..in_channels {
+        for j in 0..out_size {
+            let mut max_val = x[i * in_size + j * kernel_size];
+            for k in 1..kernel_size {
+                let val = x[i * in_size + j * kernel_size + k];
+                if is_greater_than_signed(val, max_val) {
+                    max_val = val;
+                }
+            }
+            result[i * out_size + j] = max_val;
+        }
+    }
+    result
+}
+
 ////////////////////
 //     TESTS      //
 ////////////////////
@@ -216,4 +247,11 @@ fn test_conv2d_nonsq() {
   let output = conv2d_nonsq(x, w, b, in_height, in_width, in_channels, out_channels, kernel_height, kernel_width, stride);
 
   assert(output == [ 30, 30, 37, 37, 38, 38 ]);
+}
+
+#[test]
+fn test_max_pool_1d() {
+    let x = [1, 2, 3, 4, 5, 6, 7, 8];
+    let output = max_pool_1d(x, 4, 2, 2);
+    assert(output == [2, 4, 6, 8]);
 }
