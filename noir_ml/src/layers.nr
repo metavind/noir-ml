@@ -71,33 +71,7 @@ fn conv2d<N_CIN_IN, N_COUT_CIN_K, N_COUT, N_COUT_OUT>(
   out_channels: Field,
   kernel_size: Field,
   stride: Field) -> [Field; N_COUT_OUT] {
-
-    assert(N_CIN_IN == in_channels * in_size * in_size);
-    assert(N_COUT_CIN_K == out_channels * in_channels * kernel_size * kernel_size);
-    assert(N_COUT == out_channels);
-
-    let out_size = (in_size - kernel_size) / stride + 1;
-
-    assert(N_COUT_OUT == out_channels * out_size * out_size);
-
-    let mut result = [ 0; N_COUT_OUT ];
-
-    for i in 0..out_channels {
-      for j in 0..out_size {
-        for k in 0..out_size {
-          let mut sum = b[i];
-          for l in 0..in_channels {
-            for m in 0..kernel_size {
-              for n in 0..kernel_size {
-                sum += w[i * in_channels * kernel_size * kernel_size + l * kernel_size * kernel_size + m * kernel_size + n] * x[(j * stride + m) * in_size + k * stride + n + l * in_size * in_size];
-              }
-            }
-          }
-          result[i * out_size * out_size + j * out_size + k] = sum;
-        }
-      }
-    }
-    result
+    conv2d_nonsq(x, w, b, in_size, in_size, in_channels, out_channels, kernel_size, kernel_size, stride)
   }
 
 fn conv2d_nonsq<N_CIN_HIN_WIN, N_COUT_CIN_HK_WK, N_COUT, N_COUT_HOUT_WOUT>(
