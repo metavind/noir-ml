@@ -1,17 +1,16 @@
-fn mat_vec_mul<N_IN, N_IN_OUT, N_OUT>(m: [ Field; N_IN_OUT], v: [Field; N_IN]) -> [Field; N_OUT] {
-  assert(N_IN_OUT == N_IN * N_OUT);
-  
-  let mut result = [ 0; N_OUT ];
+fn mat_vec_mul<N_M, M, N>(m: [ Field; N_M], v: [Field; M]) -> [Field; N] {
 
-  for i in 0..N_OUT {
-    for j in 0..N_IN {
-      result[i] += m[i*N_IN + j] * v[j];
+  assert(N_M == N * M);
+  
+  let mut result = [ 0; N ];
+
+  for i in 0..N {
+    for j in 0..M {
+      result[i] += m[i*M + j] * v[j];
     }
   }
   result
 }
-
-use crate::utils_arr::{pad_arr, prune_arr};
 
 struct Matrix<N> {
   rows: Field,
@@ -34,7 +33,6 @@ fn mat_mul<N, M, L>(x: Matrix<N>, y: Matrix<M>) -> Matrix<L> {
   }
   result
 }
-
 
 
 ////////////////////
