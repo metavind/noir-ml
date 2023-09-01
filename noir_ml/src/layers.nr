@@ -146,6 +146,32 @@ fn max_pool_1d<N_CIN_IN, N_COUT_OUT>(
     result
 }
 
+fn avg_pool_1d<N_CIN_IN, N_COUT_OUT>(
+    x: [Field; N_CIN_IN],
+    in_size: Field,
+    in_channels: Field,
+    kernel_size: Field) -> [Field; N_COUT_OUT] {
+
+    assert(N_CIN_IN == in_channels * in_size);
+
+    let out_size = in_size / kernel_size;
+
+    assert(N_COUT_OUT == in_channels * out_size);
+
+    let mut result = [0; N_COUT_OUT];
+
+    for i in 0..in_channels {
+        for j in 0..out_size {
+            let mut sum_val = 0;
+            for k in 0..kernel_size {
+                sum_val += x[i * in_size + j * kernel_size + k];
+            }
+            result[i * out_size + j] = sum_val/kernel_size;
+        }
+    }
+    result
+}
+
 ////////////////////
 //     TESTS      //
 ////////////////////
@@ -254,4 +280,11 @@ fn test_max_pool_1d() {
     let x = [1, 2, 3, 4, 5, 6, 7, 8];
     let output = max_pool_1d(x, 4, 2, 2);
     assert(output == [2, 4, 6, 8]);
+}
+
+#[test]
+fn test_avg_pool_1d() {
+    let x = [1, 3, 2, 4, 5, 7, 6, 8];
+    let output = avg_pool_1d(x, 4, 2, 2);
+    assert(output == [2, 3, 6, 7]);
 }
