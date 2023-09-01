@@ -22,16 +22,16 @@ fn mat_mul<N, M, L>(x: Matrix<N>, y: Matrix<M>) -> Matrix<L> {
 
   assert(x.cols == y.rows);
 
-  let mut result = Matrix { rows: x.rows, cols: y.cols, data: [ 0; L ] };
+  let mut result = [ 0; L ];
 
   for i in 0..x.rows {
     for j in 0..y.cols {
       for k in 0..x.cols {
-        result.data[i*y.cols + j] += x.data[i*x.cols + k] * y.data[k*y.cols + j];
+        result[i*y.cols + j] += x.data[i*x.cols + k] * y.data[k*y.cols + j];
       }
     }
   }
-  result
+  Matrix { rows: x.rows, cols: y.cols, data: result }
 }
 
 
