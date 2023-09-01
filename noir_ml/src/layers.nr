@@ -62,7 +62,7 @@ fn conv1d<N_CIN_IN, N_COUT_CIN_K, N_COUT, N_COUT_OUT>(
   result
 }
 
-fn conv2d<N_CIN_HIN_WIN, N_COUT_CIN_HK_WK, N_COUT, N_COUT_HOUT_WOUT>(
+fn conv2d_nonsq<N_CIN_HIN_WIN, N_COUT_CIN_HK_WK, N_COUT, N_COUT_HOUT_WOUT>(
   x: [Field; N_CIN_HIN_WIN],
   w: [Field; N_COUT_CIN_HK_WK],
   b: [Field; N_COUT],
@@ -130,7 +130,7 @@ fn test_conv1d() {
 }
 
 #[test]
-fn test_conv2d() {
+fn test_conv2d_nonsq() {
   let x: [Field; 40] = [
     1, 2, 3, 4, 5,
     4, 5, 6, 7, 8,
@@ -177,7 +177,7 @@ fn test_conv2d() {
   let kernel_width = 2;
   let stride = 2;
 
-  let output = conv2d(x, w, b, in_height, in_width, in_channels, out_channels, kernel_height, kernel_width, stride);
+  let output = conv2d_nonsq(x, w, b, in_height, in_width, in_channels, out_channels, kernel_height, kernel_width, stride);
 
   assert(output == [ 30, 30, 37, 37, 38, 38 ]);
 }
