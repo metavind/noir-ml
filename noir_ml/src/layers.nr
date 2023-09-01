@@ -39,12 +39,12 @@ fn conv1d<N_CIN_IN, N_COUT_CIN_K, N_COUT, N_COUT_OUT>(
   stride: Field) -> [Field; N_COUT_OUT] {
 
   assert(N_CIN_IN == in_channels * in_size);
-  assert(N_COUT_CIN_K == kernel_size * in_channels * out_channels);
+  assert(N_COUT_CIN_K == out_channels * in_channels * kernel_size);
   assert(N_COUT == out_channels);
 
   let out_size = (in_size - kernel_size) / stride + 1;
 
-  assert(N_COUT_OUT == out_size * out_channels);
+  assert(N_COUT_OUT == out_channels * out_size);
 
   let mut result = [ 0; N_COUT_OUT ];
 
@@ -75,7 +75,7 @@ fn conv2d_nonsq<N_CIN_HIN_WIN, N_COUT_CIN_HK_WK, N_COUT, N_COUT_HOUT_WOUT>(
   stride: Field) -> [Field; N_COUT_HOUT_WOUT] {
 
   assert(N_CIN_HIN_WIN == in_channels * in_height * in_width);
-  assert(N_COUT_CIN_HK_WK == in_channels * out_channels * kernel_height * kernel_width);
+  assert(N_COUT_CIN_HK_WK == out_channels * in_channels * kernel_height * kernel_width);
   assert(N_COUT == out_channels);
 
   let out_height = (in_height - kernel_height) / stride + 1;
