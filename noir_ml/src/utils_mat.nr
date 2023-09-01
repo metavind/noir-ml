@@ -11,31 +11,8 @@ fn mat_vec_mul<N_IN, N_IN_OUT, N_OUT>(m: [ Field; N_IN_OUT], v: [Field; N_IN]) -
   result
 }
 
-
-// Ideally, there we would support for const generic and we can write a funtion like this:
-//fn mat_mul<N, M, L>(x : [ Field; N*M ], y : [ Field; M*L ]) -> [ Field; N*L ] {
-//
-//  let mut res = [ 0; N*L ];
-//
-//  for i in 0..N {
-//    for j in 0..L {
-//      for k in 0..M {
-//        res[i*L + j] += x[i*M + k] * y[k*L + j];
-//      }
-//    }
-//  }
-//  res
-//}
-
-// Possible workarounds involve using different functions for different matrix sizes, or using 
-// a struct with a large fixed size array and extra fields to indicate the actual rows and 
-// columns of the matrix.
-
-// The following code uses the second approach. It is not ideal, but it works.
-
 use crate::utils_arr::{pad_arr, prune_arr};
-
-global MAX_LENGTH: comptime Field = 10;
+global MAX_LENGTH: Field = 10;
 
 struct Matrix {
   rows: Field,
@@ -47,24 +24,17 @@ fn mat_mul(x: Matrix, y: Matrix) -> Matrix {
   assert(x.cols == y.rows);
 
   let mut result = Matrix { rows: x.rows, cols: y.cols, data: [ 0; MAX_LENGTH ] };
-// Ideally, we would like to use the i, j, k for loop variables till x.rows, y.cols, x.cols respectively.
-// But, since the compiler does not support const generics, the loop range must be known at compile time. 
-// We therefore use MAX_LENGTH as the upper bound.
-  for i in 0..MAX_LENGTH {
-    if i as u64 < x.rows as u64 {
-        for j in 0..MAX_LENGTH {
-            if j as u64 < y.cols as u64 {
-                for k in 0..MAX_LENGTH {
-                    if k as u64 < x.cols as u64 {
-                        result.data[i*y.cols + j] += x.data[i*x.cols + k] * y.data[k*y.cols + j];
-                    }
-                }
-            }
-        }
+
+  for i in 0..x.rows {
+    for j in 0..y.cols {
+      for k in 0..x.cols {
+        result.data[i*y.cols + j] += x.data[i*x.cols + k] * y.data[k*y.cols + j];
+      }
     }
   }
   result
 }
+
 
 
 ////////////////////
