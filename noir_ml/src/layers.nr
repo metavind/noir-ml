@@ -28,6 +28,40 @@ fn fc<N_IN, N_IN_OUT, N_OUT>(x: [ Field; N_IN], w: [Field; N_IN_OUT], b: [Field;
   result
 }
 
+fn conv1d<N_IN_CIN, N_K_CIN_COUT, N_COUT, N_OUT_COUT>(
+  x: [Field; N_IN_CIN],
+  w: [Field; N_K_CIN_COUT],
+  b: [Field; N_COUT],
+  in_size: Field,
+  in_channels: Field,
+  out_channels: Field,
+  kernel_size: Field,
+  stride: Field) -> [Field; N_OUT_COUT] {
+
+  assert(N_IN_CIN == in_channels * in_size);
+  assert(N_K_CIN_COUT == kernel_size * in_channels * out_channels);
+  assert(N_COUT == out_channels);
+
+  let out_size = (in_size - kernel_size) / stride + 1;
+
+  assert(N_OUT_COUT == out_size * out_channels);
+
+  let mut result = [ 0; N_OUT_COUT ];
+
+  for i in 0..out_channels {
+    for j in 0..out_size {
+      let mut sum = b[i];
+      for k in 0..in_channels {
+        for l in 0..kernel_size {
+          sum += w[i * in_channels * kernel_size + k * kernel_size + l] * x[(j * stride + l) + k * in_size];
+        }
+      }
+      result[i * out_size + j] = sum;
+    }
+  }
+  result
+}
+
 ////////////////////
 //     TESTS      //
 ////////////////////
@@ -35,4 +69,21 @@ fn fc<N_IN, N_IN_OUT, N_OUT>(x: [ Field; N_IN], w: [Field; N_IN_OUT], b: [Field;
 #[test]
 fn test_fc() {
   assert(fc([ 1, 2, 3 ], [ 4, 5, 6, 7, 8, 9 ], [ 10, 11 ]) == [ 42, 61 ]);
+}
+
+#[test]
+fn test_conv1d() {
+  let x: [Field; 10] = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+  let w: [Field; 6] = [ 2, 3, 1, 2, 0, 3 ];
+  let b: [Field; 1] = [1];
+
+  let inp_size = 5;
+  let in_channels = 2;
+  let out_channels = 1;
+  let kernel_size = 3;
+  let stride = 1;
+
+  let output = conv1d(x, w, b, inp_size, in_channels, out_channels, kernel_size, stride);
+
+  assert(output == [ 48, 59, 70 ]);
 }
