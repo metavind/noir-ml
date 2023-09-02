@@ -172,6 +172,51 @@ fn avg_pool_1d<N_CIN_IN, N_COUT_OUT>(
     result
 }
 
+fn max_pool_2d_nonsq<N_CIN_HIN_WIN, N_COUT_HOUT_WOUT>(
+    x: [Field; N_CIN_HIN_WIN],
+    in_height: Field,
+    in_width: Field,
+    in_channels: Field,
+    kernel_height: Field,
+    kernel_width: Field) -> [Field; N_COUT_HOUT_WOUT] {
+
+    assert(N_CIN_HIN_WIN == in_channels * in_height * in_width);
+
+    let out_height = in_height / kernel_height;
+    let out_width = in_width / kernel_width;
+
+    assert(N_COUT_HOUT_WOUT == in_channels * out_height * out_width);
+
+    let mut result = [0; N_COUT_HOUT_WOUT];
+
+    for i in 0..in_channels {
+        for j in 0..out_height {
+            for k in 0..out_width {
+                let mut max_val = x[i * in_height * in_width + j * kernel_height * in_width + k * kernel_width];
+                for l in 1..kernel_height {
+                    for m in 0..kernel_width {
+                        let val = x[i * in_height * in_width + (j * kernel_height + l) * in_width + k * kernel_width + m];
+                        if is_greater_than_signed(val, max_val) {
+                            max_val = val;
+                        }
+                    }
+                }
+                result[i * out_height * out_width + j * out_width + k] = max_val;
+            }
+        }
+    }
+    result
+}
+
+fn max_pool_2d<N_CIN_IN, N_COUT_OUT>(
+    x: [Field; N_CIN_IN],
+    in_size: Field,
+    in_channels: Field,
+    kernel_size: Field) -> [Field; N_COUT_OUT] {
+
+    max_pool_2d_nonsq(x, in_size, in_size, in_channels, kernel_size, kernel_size)
+}
+
 ////////////////////
 //     TESTS      //
 ////////////////////
@@ -287,4 +332,38 @@ fn test_avg_pool_1d() {
     let x = [1, 3, 2, 4, 5, 7, 6, 8];
     let output = avg_pool_1d(x, 4, 2, 2);
     assert(output == [2, 3, 6, 7]);
+}
+
+#[test]
+fn test_max_pool_2d() {
+    let x = [
+        1, 2,
+        3, 4,
+
+        5, 6,
+        7, 8
+];
+
+    let output = max_pool_2d(x, 2, 2, 2);
+
+    assert(output == [4, 8]);
+}
+
+#[test]
+fn test_max_pool_2d_nonsq() {
+    let x = [
+        1, 2, 3,
+        4, 5, 6,
+        7, 8, 9,
+        10, 11, 12,
+
+        0, 2, 4,
+        6, 8, 10,
+        12, 14, 16,
+        18, 20, 22
+];
+
+    let output = max_pool_2d_nonsq(x, 4, 3, 2, 2, 3);
+
+    assert(output == [6, 12, 10, 22]);
 }
