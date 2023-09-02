@@ -1,0 +1,8 @@
+[package]
+name = "mnist_cnn"
+type = "bin"
+authors = [""]
+compiler_version = "0.10.5"
+
+[dependencies]
+noir_ml = { path = "../../noir_ml" }

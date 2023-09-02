@@ -1,2 +1,7 @@
 [workspace]
-members = ["noir_ml", "example_circuits/circle_fc", "example_circuits/mnist_fc"]
+members = [
+    "noir_ml",
+    "example_circuits/circle_fc",
+    "example_circuits/mnist_fc",
+    "example_circuits/mnist_cnn",
+]
