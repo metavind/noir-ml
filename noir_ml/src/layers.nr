@@ -18,7 +18,7 @@ use crate::utils::is_greater_than_signed;
 /// ```
 fn fc<N_IN, N_IN_OUT, N_OUT>(x: [ Field; N_IN], w: [Field; N_IN_OUT], b: [Field; N_OUT]) -> [Field; N_OUT] {
   assert(N_IN_OUT == N_IN * N_OUT);
-  
+
   let mut result = [ 0; N_OUT ];
 
   for i in 0..N_OUT {
@@ -64,18 +64,6 @@ fn conv1d<N_CIN_IN, N_COUT_CIN_K, N_COUT, N_COUT_OUT>(
   result
 }
 
-fn conv2d<N_CIN_IN, N_COUT_CIN_K, N_COUT, N_COUT_OUT>(
-  x: [Field; N_CIN_IN],
-  w: [Field; N_COUT_CIN_K],
-  b: [Field; N_COUT],
-  in_size: Field,
-  in_channels: Field,
-  out_channels: Field,
-  kernel_size: Field,
-  stride: Field) -> [Field; N_COUT_OUT] {
-    conv2d_nonsq(x, w, b, in_size, in_size, in_channels, out_channels, kernel_size, kernel_size, stride)
-  }
-
 fn conv2d_nonsq<N_CIN_HIN_WIN, N_COUT_CIN_HK_WK, N_COUT, N_COUT_HOUT_WOUT>(
   x: [Field; N_CIN_HIN_WIN],
   w: [Field; N_COUT_CIN_HK_WK],
@@ -116,6 +104,18 @@ fn conv2d_nonsq<N_CIN_HIN_WIN, N_COUT_CIN_HK_WK, N_COUT, N_COUT_HOUT_WOUT>(
   }
   result
 }
+
+fn conv2d<N_CIN_IN, N_COUT_CIN_K, N_COUT, N_COUT_OUT>(
+  x: [Field; N_CIN_IN],
+  w: [Field; N_COUT_CIN_K],
+  b: [Field; N_COUT],
+  in_size: Field,
+  in_channels: Field,
+  out_channels: Field,
+  kernel_size: Field,
+  stride: Field) -> [Field; N_COUT_OUT] {
+    conv2d_nonsq(x, w, b, in_size, in_size, in_channels, out_channels, kernel_size, kernel_size, stride)
+  }
 
 fn max_pool_1d<N_CIN_IN, N_COUT_OUT>(
     x: [Field; N_CIN_IN],
@@ -239,23 +239,23 @@ fn test_conv2d_nonsq() {
     1, 0,
     0, 1,
     0, 1,
-    
+
     1, 0,
     0, 1,
     1, 0,
-    
+
     1, 0,
     0, 1,
     1, 1,
-    
+
     1, 1,
     0, 1,
     0, 1,
-    
+
     1, 1,
     0, 1,
     1, 0,
-    
+
     1, 1,
     1, 0,
     1, 0,
