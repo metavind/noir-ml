@@ -172,6 +172,32 @@ fn avg_pool_1d<N_CIN_IN, N_COUT_OUT>(
     result
 }
 
+fn sum_pool_1d<N_CIN_IN, N_COUT_OUT>(
+    x: [Field; N_CIN_IN],
+    in_size: Field,
+    in_channels: Field,
+    kernel_size: Field) -> [Field; N_COUT_OUT] {
+
+    assert(N_CIN_IN == in_channels * in_size);
+
+    let out_size = in_size / kernel_size;
+
+    assert(N_COUT_OUT == in_channels * out_size);
+
+    let mut result = [0; N_COUT_OUT];
+
+    for i in 0..in_channels {
+        for j in 0..out_size {
+            let mut sum_val = 0;
+            for k in 0..kernel_size {
+                sum_val += x[i * in_size + j * kernel_size + k];
+            }
+            result[i * out_size + j] = sum_val;
+        }
+    }
+    result
+}
+
 fn max_pool_2d_nonsq<N_CIN_HIN_WIN, N_COUT_HOUT_WOUT>(
     x: [Field; N_CIN_HIN_WIN],
     in_height: Field,
@@ -374,6 +400,13 @@ fn test_avg_pool_1d() {
     let x = [1, 3, 2, 4, 5, 7, 6, 8];
     let output = avg_pool_1d(x, 4, 2, 2);
     assert(output == [2, 3, 6, 7]);
+}
+
+#[test]
+fn test_sum_pool_1d() {
+    let x = [1, 3, 2, 4, 5, 7, 6, 8];
+    let output = sum_pool_1d(x, 4, 2, 2);
+    assert(output == [4, 6, 12, 14]);
 }
 
 #[test]
