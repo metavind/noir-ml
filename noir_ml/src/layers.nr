@@ -285,6 +285,48 @@ fn avg_pool_2d<N_CIN_IN, N_COUT_OUT>(
     avg_pool_2d_nonsq(x, in_size, in_size, in_channels, kernel_size, kernel_size)
 }
 
+fn sum_pool_2d_nonsq<N_CIN_HIN_WIN, N_COUT_HOUT_WOUT>(
+    x: [Field; N_CIN_HIN_WIN],
+    in_height: Field,
+    in_width: Field,
+    in_channels: Field,
+    kernel_height: Field,
+    kernel_width: Field) -> [Field; N_COUT_HOUT_WOUT] {
+
+    assert(N_CIN_HIN_WIN == in_channels * in_height * in_width);
+
+    let out_height = in_height / kernel_height;
+    let out_width = in_width / kernel_width;
+
+    assert(N_COUT_HOUT_WOUT == in_channels * out_height * out_width);
+
+    let mut result = [0; N_COUT_HOUT_WOUT];
+
+    for i in 0..in_channels {
+        for j in 0..out_height {
+            for k in 0..out_width {
+                let mut sum_val = 0;
+                for l in 0..kernel_height {
+                    for m in 0..kernel_width {
+                        sum_val += x[i * in_height * in_width + (j * kernel_height + l) * in_width + k * kernel_width + m];
+                    }
+                }
+                result[i * out_height * out_width + j * out_width + k] = sum_val;
+            }
+        }
+    }
+    result
+}
+
+fn sum_pool_2d<N_CIN_IN, N_COUT_OUT>(
+    x: [Field; N_CIN_IN],
+    in_size: Field,
+    in_channels: Field,
+    kernel_size: Field) -> [Field; N_COUT_OUT] {
+
+    sum_pool_2d_nonsq(x, in_size, in_size, in_channels, kernel_size, kernel_size)
+}
+
 ////////////////////
 //     TESTS      //
 ////////////////////
@@ -476,4 +518,39 @@ fn test_avg_pool_2d_nonsq() {
 
     let output = avg_pool_2d_nonsq(x, 4, 3, 2, 2, 3);
     assert(output == [3, 8, 5, 17]);
+}
+
+#[test]
+fn test_sum_pool_2d() {
+    let x = [
+        1, 2, 3,
+        4, 5, 6,
+        7, 8, 9,
+
+        0, 2, 4,
+        4, 2, 0,
+        2, 0, 4
+];
+
+    let output = sum_pool_2d(x, 3, 2, 3);
+
+    assert(output == [45, 18]);
+}
+
+#[test]
+fn test_sum_pool_2d_nonsq() {
+    let x = [
+        1, 2, 3,
+        2, 4, 6,
+        7, 8, 9,
+        9, 8, 7,
+
+        0, 2, 4,
+        6, 8, 10,
+        12, 14, 16,
+        18, 20, 22
+];
+
+    let output = sum_pool_2d_nonsq(x, 4, 3, 2, 2, 3);
+    assert(output == [18, 48, 30, 102]);
 }
