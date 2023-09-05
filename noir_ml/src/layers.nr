@@ -243,6 +243,39 @@ fn max_pool_2d<N_CIN_IN, N_COUT_OUT>(
     max_pool_2d_nonsq(x, in_size, in_size, in_channels, kernel_size, kernel_size)
 }
 
+fn global_max_pool_2d_nonsq<N_CIN_HIN_WIN, N_COUT>(
+    x: [Field; N_CIN_HIN_WIN],
+    in_height: Field,
+    in_width: Field,
+    in_channels: Field) -> [Field; N_COUT] {
+
+    assert(N_CIN_HIN_WIN == in_channels * in_height * in_width);
+
+    let mut result = [0; N_COUT];
+
+    for i in 0..in_channels {
+        let mut max_val = x[i * in_height * in_width];
+        for j in 1..in_height {
+            for k in 0..in_width {
+                let val = x[i * in_height * in_width + j * in_width + k];
+                if is_greater_than_signed(val, max_val) {
+                    max_val = val;
+                }
+            }
+        }
+        result[i] = max_val;
+    }
+    result
+}
+
+fn global_max_pool_2d<N_CIN_IN, N_COUT>(
+    x: [Field; N_CIN_IN],
+    in_size: Field,
+    in_channels: Field) -> [Field; N_COUT] {
+
+    global_max_pool_2d_nonsq(x, in_size, in_size, in_channels)
+}
+
 fn avg_pool_2d_nonsq<N_CIN_HIN_WIN, N_COUT_HOUT_WOUT>(
     x: [Field; N_CIN_HIN_WIN],
     in_height: Field,
@@ -483,6 +516,40 @@ fn test_max_pool_2d_nonsq() {
     let output = max_pool_2d_nonsq(x, 4, 3, 2, 2, 3);
 
     assert(output == [6, 12, 10, 22]);
+}
+
+#[test]
+fn test_global_max_pool_2d() {
+    let x = [
+        1, 2,
+        3, 4,
+
+        5, 6,
+        7, 8
+];
+
+    let output = global_max_pool_2d(x, 2, 2);
+
+    assert(output == [4, 8]);
+}
+
+#[test]
+fn test_global_max_pool_2d_nonsq() {
+    let x = [
+        1, 2, 3,
+        4, 5, 6,
+        7, 8, 9,
+        10, 11, 12,
+
+        0, 2, 4,
+        6, 8, 10,
+        12, 14, 16,
+        18, 20, 22
+];
+
+    let output = global_max_pool_2d_nonsq(x, 4, 3, 2);
+
+    assert(output == [12, 22]);
 }
 
 #[test]
