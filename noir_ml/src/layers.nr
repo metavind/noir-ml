@@ -219,7 +219,7 @@ fn max_pool_2d_nonsq<N_CIN_HIN_WIN, N_COUT_HOUT_WOUT>(
         for j in 0..out_height {
             for k in 0..out_width {
                 let mut max_val = x[i * in_height * in_width + j * kernel_height * in_width + k * kernel_width];
-                for l in 1..kernel_height {
+                for l in 0..kernel_height {
                     for m in 0..kernel_width {
                         let val = x[i * in_height * in_width + (j * kernel_height + l) * in_width + k * kernel_width + m];
                         if is_greater_than_signed(val, max_val) {
@@ -255,7 +255,7 @@ fn global_max_pool_2d_nonsq<N_CIN_HIN_WIN, N_COUT>(
 
     for i in 0..in_channels {
         let mut max_val = x[i * in_height * in_width];
-        for j in 1..in_height {
+        for j in 0..in_height {
             for k in 0..in_width {
                 let val = x[i * in_height * in_width + j * in_width + k];
                 if is_greater_than_signed(val, max_val) {
